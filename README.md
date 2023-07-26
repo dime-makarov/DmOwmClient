@@ -13,4 +13,4 @@ const AppId = "{YOUR_API_KEY}";
 
 export { AppId };
 ```
-You can generate the `YOUR_API_KEY` here: https://home.openweathermap.org/api_keys.
+You can generate the `{YOUR_API_KEY}` here: https://home.openweathermap.org/api_keys.
