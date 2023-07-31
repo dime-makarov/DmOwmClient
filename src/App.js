@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import CityData from "./CityData";
 import { AppId } from "./secrets";
@@ -7,39 +8,31 @@ function App() {
   const [cities, setCities] = useState([]);
   const [cityData, setCityData] = useState(null);
 
-  function searchCities() {
-    fetch(
-      "http://api.openweathermap.org/geo/1.0/direct?q=" +
-        cityName +
-        "&limit=5&appid=" +
-        AppId
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setCities(data);
-        setCityData(null);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
+  const webClient = axios.create({
+    baseURL: "http://api.openweathermap.org",
+  });
+
+  async function searchCities() {
+    try {
+      var response = await webClient.get(
+        `geo/1.0/direct?q=${cityName}&limit=5&appid=${AppId}`
+      );
+      setCities(response.data);
+      setCityData(null);
+    } catch (error) {
+      alert(error);
+    }
   }
 
-  function onTableRowClick(lat, lon) {
-    fetch(
-      "https://api.openweathermap.org/data/2.5/weather?lat=" +
-        lat +
-        "&lon=" +
-        lon +
-        "&units=metric&appid=" +
-        AppId
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setCityData(data);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
+  async function onTableRowClick(lat, lon) {
+    try {
+      var response = await webClient.get(
+        `data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${AppId}`
+      );
+      setCityData(response.data);
+    } catch (error) {
+      alert(error);
+    }
   }
 
   return (
